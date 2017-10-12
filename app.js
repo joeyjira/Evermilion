@@ -1,18 +1,22 @@
 const express = require('express');
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const userRoutes = require('./user/user_routes');
 
+// Initialiaze express server
 const app = express();
 
-// Middlewares
-app.use(morgan('dev'));
+// Middleware
+app.use(morgan('dev'))
 app.use(bodyParser.json());
 
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/evermilion');
+// Configure Routes
+userRoutes(app);
 
-// Routes
-app.use('/users', require('./user/user_routes'));
+// Tells app to listen on port
+const PORT = process.env.PORT || 3000
 
-module.exports = app;
+app.listen(3000, function() {
+    console.log(`Listening on PORT ${PORT}`)
+})
