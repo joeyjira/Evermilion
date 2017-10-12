@@ -1,7 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const routes = require('./config/routes');
 const mongoose = require('mongoose');
 
 const app = express();
@@ -14,6 +13,6 @@ mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/evermilion');
 
 // Routes
-routes(app);
+app.use('/users', require('./user/user_routes'));
 
 module.exports = app;
