@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const userRoutes = require('./user/user_routes');
 
+// connect to database
+mongoose.connect('mongodb://localhost/evermilion')
+
 // Initialiaze express server
 const app = express();
 

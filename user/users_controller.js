@@ -1,38 +1,24 @@
-// const User = require('./user_model');
+const User = require('./user_model');
 
-// module.exports = {
-//     // greeting: function(req, res) {
-//     //     res.send({ hi: 'there' })
-//     // },
+module.exports = {
+    async signUp(req, res, next) {
+        console.log('UsersController.signUp() called');
 
-//     // create(req, res) {
-//     //     console.log(req);
-//     //     res.send({ hi: 'there' })
-//     // }
+        const { email, password } = req.body;
+        const newUser = new User({ email, password });
 
-//     signUp: async (req, res, next) => {
-//         // Email & Password
-//         try {
-//             console.log('UsersController.signUp() called!');
-//         } catch(error) {
-//             next(error);
-//         }
-//     },
+        console.log(newUser);
+        await newUser.save();
 
-//     signIn: async (req, res, next) => {
-//         try {
-//             // Generate token
-//             console.log('UsersController.signIn() called!');
-//         } catch(error) {
-//             next(error);
-//         }
-//     },
+        res.json({ user: 'created' })
+    },
 
-//     secret: async (req, res, next) => {
-//         try {
-//             console.log('UsersController.secret() called!');
-//         } catch(error) {
-//             next(error);
-//         }
-//     },
-// }
+    async signIn(req, res, next) {
+        // Generate token
+        console.log('UsersController.signIn() called!');
+    },
+
+    async secret(req, res, next) {
+        console.log('UsersController.secret() called!');
+    }
+}
