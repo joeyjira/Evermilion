@@ -2,14 +2,18 @@ const User = require('./user_model');
 
 module.exports = {
     async signUp(req, res, next) {
-        console.log('UsersController.signUp() called');
-
         const { email, password } = req.body;
-        const newUser = new User({ email, password });
 
-        console.log(newUser);
+        // Check if there is already user with the same email
+        const foundUser = await User.find({ email });
+        if (foundUser) {
+            return res.status(403).send({ error: "Email already exists!"});
+        }
+        // Create a new user
+        const newUser = new User({ email, password });
         await newUser.save();
 
+        // Respond with token
         res.json({ user: 'created' })
     },
 
