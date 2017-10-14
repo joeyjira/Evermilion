@@ -1,13 +1,23 @@
 const JWT = require('jsonwebtoken');
 const User = require('./user_model');
+const { JWT_SECRET } = require('../config/secret');
+
+function signToken(user) {
+    return JWT.sign({
+        iss: 'Evermilion',
+        sub: user.id,
+        iat: new Date().getTime(),
+        exp: new Date().setDate(new Date().getDate() + 1)
+    }, JWT_SECRET);
+} 
 
 module.exports = {
     async signUp(req, res, next) {
         const { email, password } = req.body;
 
         // Check if there is already user with the same email
-        const foundUser = await User.find({ email });
-        if (foundUser) {
+        const foundUser = await User.findOne({ email });
+         if (foundUser) {
             return res.status(403).send({ error: "Email already exists!"});
         }
         // Create a new user
@@ -16,12 +26,7 @@ module.exports = {
 
         // Respond with token
         // res.json({ user: 'created' })
-        const token = JWT.sign({
-            iss: 'Evermilion',
-            sub: newUser.id,
-            iat: new Date().getTime(),
-            exp: new Date().setDate(new Date().getDate() + 1)
-        }, 'evermillionauth');
+        const token = signToken(newUser);
 
         res.status(200).json({ token })
     },
